@@ -10,30 +10,8 @@ const sleep = (ms) => (response) =>
 
 export const requests = {
   listUsers: (pageNum) => axios.get(`users?page=${pageNum}`).then(responseBody),
-  post: (url, body) => axios.post(url, body).then(responseBody),
-  formUrlPost: (url, file) => {
-    let formData = new FormData();
-    formData.append("file", file);
-    return axios
-      .post(url, formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.token}`,
-          "content-type": "multipart/form-data",
-        },
-      })
-      .then(responseBody);
-  },
-  put: (url, body) =>
-    axios
-      .put(url, body, {
-        headers: { Authorization: `Bearer ${localStorage.token}` },
-      })
-      .then(responseBody),
-
-  delete: (url, body) =>
-    axios
-      .delete(url, body, {
-        headers: { Authorization: `Bearer ${localStorage.token}` },
-      })
-      .then(responseBody),
+  addUser: (user) => axios.post("users", user).then(responseBody),
+  editUser: (updatedUser, userId) =>
+    axios.put(`users/${userId}`, updatedUser).then(responseBody),
+  deleteUser: (UserId) => axios.delete(`users/${UserId}`).then(responseBody),
 };

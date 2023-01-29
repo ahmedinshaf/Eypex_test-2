@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import { DataGrid } from "@mui/x-data-grid";
 import { requests } from "../agent/AxiosAgent";
 import ActionWrapper from "./ActionWrapper";
+import SearchBar from "./SearchBar";
 
 const columns = [
   { field: "id", headerName: "ID", width: 90 },
@@ -34,25 +35,31 @@ const columns = [
       return <ActionWrapper row={params.row} />;
     },
   },
-  // {
-  //   field: "fullName",
-  //   headerName: "Full name",
-  //   description: "This column has a value getter and is not sortable.",
-  //   sortable: false,
-  //   width: 160,
-  //   valueGetter: (params) =>
-  //     `${params.row.firstName || ""} ${params.row.lastName || ""}`,
-  // },
 ];
 
 export default function DataGridDemo() {
   const [users, setUsers] = useState([]);
+  const [searchedUsers, setSearchedUsers] = useState([]);
+
   const [totalRows, setTotalRows] = useState(0);
   useEffect(() => {
-    fetchUsers();
+    fetchUsers(1);
   }, []);
-  async function fetchUsers() {
-    const response = await requests.listUsers(1);
+
+  function searchedHandler(e) {
+    console.log(e.target.value);
+    const filteredUsers = users.filter((row) => {
+      console.log({ row });
+      return (
+        row.firstName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        row.lastName.toLowerCase().includes(e.target.value.toLowerCase()) ||
+        row.email.toLowerCase().includes(e.target.value.toLowerCase())
+      );
+    });
+    setSearchedUsers(filteredUsers);
+  }
+  async function fetchUsers(pageNo) {
+    const response = await requests.listUsers(pageNo);
     console.log([response]);
     const totalRows = response.total;
     setTotalRows(totalRows);
@@ -66,17 +73,20 @@ export default function DataGridDemo() {
       });
     });
     setUsers(usersList);
+    setSearchedUsers(usersList);
   }
   return (
     <Box sx={{ height: 500, width: "100%" }}>
-      <h1>Users table</h1>
+      <SearchBar searchedHandler={searchedHandler} />
       <DataGrid
-        rows={users}
+        rows={searchedUsers}
         columns={columns}
         pageSize={6}
-        // rowsPerPageOptions={[5]}
         rowCount={totalRows}
-        // checkboxSelection
+        onPageChange={async (newPage) => {
+          // setPage((prev) => prev + 1);
+          await fetchUsers(newPage + 1);
+        }}
         disableSelectionOnClick
         paginationMode="server"
         experimentalFeatures={{ newEditingApi: true }}
