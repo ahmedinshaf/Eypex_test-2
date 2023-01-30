@@ -1,6 +1,7 @@
 import { Button, Box } from "@mui/material";
 import React from "react";
 import { requests } from "../agent/AxiosAgent";
+import { toast } from "react-toastify";
 
 function ActionWrapper({ row }) {
   async function updateHandler() {
@@ -13,11 +14,31 @@ function ActionWrapper({ row }) {
       row.id
     );
     console.log(updateServerResponse);
+    toast.success(`user ${row.firstName} updated`, {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+    });
   }
   async function deleteHandler() {
     try {
       const deleteServerResponse = await requests.deleteUser(row.id);
       console.log({ deleteServerResponse });
+      toast.success(`user ${row.firstName} deleted`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     } catch (e) {
       console.log("error ", e);
     }

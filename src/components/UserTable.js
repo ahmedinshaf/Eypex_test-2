@@ -4,6 +4,9 @@ import { DataGrid } from "@mui/x-data-grid";
 import { requests } from "../agent/AxiosAgent";
 import ActionWrapper from "./ActionWrapper";
 import SearchBar from "./SearchBar";
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const columns = [
   { field: "id", headerName: "ID", width: 90 },
@@ -91,6 +94,18 @@ export default function DataGridDemo() {
         disableSelectionOnClick
         paginationMode="server"
         experimentalFeatures={{ newEditingApi: true }}
+      />
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
       />
     </Box>
   );
