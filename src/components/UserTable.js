@@ -29,8 +29,9 @@ const columns = [
     field: "action",
     headerName: "Action",
     width: 500,
+    sortable: false,
     align: "center",
-    hederAlign: "center",
+    // hederAlign: "center",
     renderCell: (params) => {
       return <ActionWrapper row={params.row} />;
     },

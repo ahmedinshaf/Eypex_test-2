@@ -24,12 +24,19 @@ function ActionWrapper({ row }) {
   }
   async function contactHandler() {
     console.log("contact Handler :", row.email);
+    window.location = "mailto:" + row.email;
   }
   return (
-    <Box>
-      <Button onClick={updateHandler}>Edit</Button>
-      <Button onClick={deleteHandler}>delete</Button>
-      <Button onClick={contactHandler}>Contact</Button>
+    <Box display="flex" gap="10px">
+      <Button variant="contained" onClick={updateHandler}>
+        Edit
+      </Button>
+      <Button variant="contained" color="error" onClick={deleteHandler}>
+        delete
+      </Button>
+      <Button color="secondary" onClick={contactHandler}>
+        Contact
+      </Button>
     </Box>
   );
 }
